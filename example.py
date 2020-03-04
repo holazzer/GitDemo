@@ -4,6 +4,8 @@ import sklearn.neural_network as nn
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
+from matplotlib.colors import ListedColormap
+
 X,y = ds.make_circles(n_samples=1000,noise=0.05)
 plt.scatter(X[:,0],X[:,1],c=y)
 plt.show()
@@ -16,4 +18,19 @@ clf.fit(X_train,y_train)
 
 print(clf.score(X_test,y_test))
 
-# todo: Figure out how to draw the area of each class
+
+# 绘制colormap的方法参考:
+# https://www.jianshu.com/p/f544ac592979
+
+cmap = ListedColormap(["#cccccc","#eeeeee"])
+
+a = X.min()
+b = X.max()
+h = 0.02
+xx,yy = np.meshgrid( np.arange(a,b,h),np.arange(a,b,h) )
+Z = clf.predict(np.c_[xx.ravel(),yy.ravel()])
+zz = Z.reshape(xx.shape)
+
+plt.pcolormesh(xx,yy,zz,cmap=cmap)
+plt.scatter(X[:,0],X[:,1],c=y)
+plt.show()
